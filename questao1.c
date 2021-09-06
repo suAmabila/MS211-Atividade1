@@ -10,7 +10,7 @@ void teste_precisao_float(int VAL)
     }
 
     float Prec = 2 * A;
-    printf("Float = %e\n", Prec);
+    printf("Float = %.64e\n", Prec);
 }
 
 void teste_precisao_double(int VAL)
@@ -23,7 +23,7 @@ void teste_precisao_double(int VAL)
     }
 
     double Prec = 2 * A;
-    printf("Double = %e\n", Prec);
+    printf("Double = %.64e\n", Prec);
 }
 
 void teste_precisao(int VAL)

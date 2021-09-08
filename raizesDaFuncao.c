@@ -2,31 +2,38 @@
 #include <math.h>
 #include "raizesDaFuncao.h"
 
-/*
-def defFuncDeri(f, d):
-    global functionF
-    global derivada
-
-    functionF = f
-    derivada = d
-*/
-
-double funcao(double x){
-    return 1.0;
-    //return functionF(x);
-    //return x ** 3 - 9 * x + 3
+double funcao(int opcao, double x){
+    double num = 0;
+    if(opcao == 1){
+        double expo = pow((-1 * x), 2);
+        num = exp(expo) - cos(x);
+        return num;
+    } else if(opcao == 2){
+        num = (pow(x, 3)) - x - 1;
+        return num;
+    }
 }
 
-double derivadaF(double x){
-    return 1.0;
-    //return derivada(x);
-    //return 3 * x ** 2 - 9
+double derivada(int opcao, double x){
+    if(opcao == 1){
+        return ((-1 * 2) * x + exp(pow(x, 2)) * sin(x)) / (exp(pow(x, 2)));
+    } else if(opcao == 2){
+        return 3 * pow(x, 2) - 1;
+    }
+}
+
+double funcaoFi(int opcao, double x){
+    if(opcao == 1){
+        return cos(x) - exp(pow((-1 * x), 2)) + x;
+    } else if(opcao == 2){
+        return pow((x + 1), (1 / 3));
+    }
 }
 
 int sgn(double x){
     if(x > 0){
         return 1;
-    }else if(x < 0){
+    } else if(x < 0){
         return -1;
     } else if(x == 0){
         return 0;
@@ -34,24 +41,27 @@ int sgn(double x){
 }
 
 // certo
-double metodoBissecao(double a, double b, int maxIter, double epsilon1, double epsilon2){
+double metodoBissecao(int opcao, double a, double b, int maxIter, double epsilon1, double epsilon2){
     int i = 0;
     double raiz = 0;
     while(i < maxIter){
         double x = (a + b) / 2;
-        if(funcao(x) == 0){
+        if(funcao(opcao, x) == 0){
             printf("%.32e é a raiz da função\n", x);
             raiz = x;
             return raiz;
         } else{ 
-            if ((sgn(funcao(a)) * sgn(funcao(x))) < 0){
+            if (sgn(funcao(opcao, a)) * sgn(funcao(opcao, x)) < 0){
                 b = x;
-            } else if ((sgn(funcao(x)) * sgn(funcao(b))) < 0){
+            /*} else if ((sgn(funcao(opcao, x)) * sgn(funcao(opcao, b))) < 0){
+                a = x;
+            }*/
+            } else {
                 a = x;
             }
         }
 
-        if (fabs(b - a) < epsilon1 || fabs(funcao(x)) < epsilon2){
+        if (fabs(b - a) < epsilon1 || fabs(funcao(opcao, x)) < epsilon2){
             raiz = x;
             break;
         }
@@ -63,24 +73,24 @@ double metodoBissecao(double a, double b, int maxIter, double epsilon1, double e
 }
 
 // certo
-double metodoFalsaPosicao(double a, double b, int maxIter, double epsilon){
+double metodoFalsaPosicao(int opcao, double a, double b, int maxIter, double epsilon){
     int i = 0;
     double raiz = 0;
 
     while(i < maxIter){
-        double x = (a * funcao(b) - b * funcao(a)) / (funcao(b) - funcao(a));
+        double x = (a * funcao(opcao, b) - b * funcao(opcao, a)) / (funcao(opcao, b) - funcao(opcao, a));
         
         if(fabs(x - a) < epsilon || fabs(b - x) < epsilon){
             raiz = x;
             break;
         }
-        if(funcao(x) == 0){
+        if(funcao(opcao, x) == 0){
             raiz = x;
             return raiz;
         } else{
-            if((sgn(funcao(a)) * sgn(funcao(x))) < 0){
+            if((sgn(funcao(opcao, a)) * sgn(funcao(opcao, x))) < 0){
                 b = x;
-            } else if((sgn(funcao(x)) * sgn(funcao(b))) < 0){
+            } else if((sgn(funcao(opcao, x)) * sgn(funcao(opcao, b))) < 0){
                 a = x;
             }
         }
@@ -92,23 +102,28 @@ double metodoFalsaPosicao(double a, double b, int maxIter, double epsilon){
 }
 
 // certo
-double metodoNewton(double x_k, double epsilon1, double epsilon2){
+double metodoNewton(int opcao, double x_k, double epsilon1, double epsilon2, int *iteracoes){
     double raiz = x_k;
+    int entrou = 0;
+    *iteracoes = 0;
 
-    while(1){
+    while(entrou != 1){
         x_k = raiz;
-        double x = x_k - (funcao(x_k))/(derivadaF(x_k));
+        double x = x_k - (funcao(opcao, x_k))/(derivada(opcao, x_k));
         
-        if(fabs(x - x_k) < epsilon1 || fabs(funcao(x)) < epsilon2){
-            raiz = x;
-            return raiz;
+        if(fabs(x - x_k) < epsilon1 || fabs(funcao(opcao, x)) < epsilon2){
+            //raiz = x;
+            // return raiz
+            entrou = 1;
         }
         raiz = x;
+        (*iteracoes)++;
     }
+    return raiz;
 }
 
 // certo
-double metodoSecante(double x_1, double x_2, double epsilon1, double epsilon2){
+double metodoSecante(int opcao, double x_1, double x_2, double epsilon1, double epsilon2, int *iteracoes){
     //k = x_2
     //k - 1 = x_1
     //k + 1 = x
@@ -117,19 +132,31 @@ double metodoSecante(double x_1, double x_2, double epsilon1, double epsilon2){
     double x = 0;
 
     while(1){ 
-        double x = (x_1 * funcao(x_2) - x_2 * funcao(x_1)) / (funcao(x_2) - funcao(x_1));
-        if(fabs(x - x_2) < epsilon1 || fabs(funcao(x)) < epsilon2){
+        double x = (x_1 * funcao(opcao, x_2) - x_2 * funcao(opcao, x_1)) / (funcao(opcao, x_2) - funcao(opcao, x_1));
+        if(fabs(x - x_2) < epsilon1 || fabs(funcao(opcao, x)) < epsilon2){
             raiz = x;
             return raiz;
         }
         raiz = x;
         x_1 = x_2;
         x_2 = x;
+        (*iteracoes)++;
     }
 }
 
-double metodoPontoFixo(double x_0, double epsilon){
-    printf("\n");
+double metodoPontoFixo(int opcao, double x_0, double raizD, double epsilon, int *iteracoes){
+    double x_1 = 0;
+    while(x_1 != raizD){
+        x_1 = funcaoFi(opcao, x_0);
+
+        if(fabs(x_1 - x_0) < epsilon || fabs(funcao(opcao, x_1)) < epsilon){
+            return x_1;
+        }
+
+        x_0 = x_1;
+        (*iteracoes)++;
+    }
+    return x_1;
 }
 
 /*

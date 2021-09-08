@@ -1,47 +1,49 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
 #include "raizesDaFuncao.h"
 
-void printResultado(long double raiz, char metodo[30]){
-    printf("A raiz, pelo Método %s, é %Lf", metodo, raiz);
-    printf("f(x) = %Lf", funcao(raiz));
+void printResultado(int opcao, double raiz, char metodo[30], int iteracoes){
+    printf("A raiz, pelo Método %s, é %e\n", metodo, raiz);
+    printf("f(x) = %e\n", funcao(opcao, raiz));
+    printf("Número de iterações: %d\n", iteracoes);
     printf("\n");
 }
 
 int main(){
     // Teste usando Método da Bisseção
-    // usei função x ** 3 - 9 * x + 3
 
-    double epsilon1 = pow(10.0, -3.0);
-    double raiz = metodoBissecao(0, 1, 10, epsilon1, epsilon1);
-    printf("A raiz, pelo Método da Bisseção, é %32.e\n", raiz);
-    printf("f(x) = %.32e\n", funcao(raiz));
+    double epsilon1 = 0;
+    double raiz = 0;
+    int *iteracoes;
+
+    iteracoes = malloc(sizeof(int));
+
+    *iteracoes = 0;
+
+    epsilon1 = pow(10.0, (-1 * 6));
+    raiz = metodoBissecao(2, 1, 2, 20, epsilon1, epsilon1);
+    printResultado(2, raiz, "da Bisseção", 20);
 
     // Teste usando Método da Falsa Posição
-    // usei função x ** 3 - 9 * x + 3
 
-    epsilon1 = pow(5 * 10, -4);
-    raiz = metodoFalsaPosicao(0, 1, 3, epsilon1);
-    printf("A raiz, pelo Método da Falsa Posição, é %.32e\n", raiz);
-    printf("f(x) = %.32e\n", funcao(raiz));
+    raiz = metodoFalsaPosicao(2, 1, 2, 17, epsilon1);
+    printResultado(2, raiz, "da Falsa Posição", 17);
 
+    double raiz2 = metodoPontoFixo(2, 1, raiz, epsilon1, iteracoes);
+    printResultado(2, raiz2, "do Ponto Fixo", *iteracoes);
 
     // Teste usando Método de Newton
-    // usei função x ** 3 - 9 * x + 3
 
-    epsilon1 = pow(10, -4);
-    raiz = metodoNewton(0.5, epsilon1, epsilon1);
-    printf("A raiz, pelo Método de Newton, é %.32e\n", raiz);
-    printf("f(x) = %.32e\n", funcao(raiz));
-
+    raiz = metodoNewton(2, 0, epsilon1, epsilon1, iteracoes);
+    printResultado(2, raiz, "de Newton", *iteracoes);
 
     // Teste usando Método da Secante
-    // usei função x ** 3 - 9 * x + 3
 
-    epsilon1 = pow(5 * 10, -4);
-    raiz = metodoSecante(0, 1, epsilon1, epsilon1);
-    printf("A raiz, pelo Método da Secante, é %.32e\n", raiz);
-    printf("f(x) = %.32e\n", funcao(raiz));
+    raiz = metodoSecante(2, 0, 0.5, epsilon1, epsilon1, iteracoes);
+    printResultado(2, raiz, "da Secante", *iteracoes);
+
+    free(iteracoes);
     
     printf("\n");
     return 0;

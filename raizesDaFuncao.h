@@ -1,18 +1,20 @@
-double funcao(double x);
+double funcao(int opcao, double x);
 
-double derivadaF(double x);
+double derivadaF(int opcao, double x);
+
+double funcaoFi(int opcao, double x);
 
 int sgn(double x);
 
-double metodoBissecao(double a, double b, int maxIter, double epsilon1, double epsilon2);
+double metodoBissecao(int opcao, double a, double b, int maxIter, double epsilon1, double epsilon2);
     
-double metodoFalsaPosicao(double a, double b, int maxIter, double epsilon);
+double metodoFalsaPosicao(int opcao, double a, double b, int maxIter, double epsilon);
     
-double metodoNewton(double x_k, double epsilon1, double epsilon2);
+double metodoNewton(int opcao, double x_k, double epsilon1, double epsilon2, int *iteracoes);
 
-double metodoSecante(double x_1, double x_2, double epsilon1, double epsilon2);
+double metodoSecante(int opcao, double x_1, double x_2, double epsilon1, double epsilon2, int *iteracoes);
 
-double metodoPontoFixo(double x_0, double epsilon);
+double metodoPontoFixo(int opcao, double x_0, double raizD, double epsilon, int *iteracoes);
 
 /*
 def ordemConvergencia(x_k, x_n, x_nMais1, epsilon):

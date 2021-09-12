@@ -16,10 +16,6 @@ def printResultado(opcao, raiz, iteracoes, erro, p, metodo):
     print('Número de iterações: ', iteracoes)
     print()
 
-
-epsilon1 = 10 ** -12
-epsilon2 = 10 ** -15
-
 epsilon18 = 10 ** -4
 epsilon19 = 10 ** -6
 
@@ -35,10 +31,10 @@ printResultado(1, round(raiz, 8), iteracoes, erro, p, 'da Bisseção')
 raiz, iteracoes, erro, p = metodoFalsaPosicao(1, 1, 2, 6, epsilon18)
 printResultado(1, round(raiz, 8), iteracoes, erro, p, 'da Falsa Posição')
 
-raiz, iteracoes, erro, p = metodoPontoFixo(1, 1.5, metodoNewton(1, 1.5, epsilon18, epsilon18)[0], epsilon18)
+raiz, iteracoes, erro, p = metodoPontoFixo(1, 1.5, epsilon18)
 printResultado(1, round(raiz, 8), iteracoes, erro, p, 'do Ponto Fixo')
 
-raiz, iteracoes, erro, p = metodoNewton(1, 1.5, epsilon18, epsilon18)
+raiz, iteracoes, erro, p = metodoNewton(1, 1.5, epsilon18, epsilon18, 0)
 printResultado(1, round(raiz, 8), iteracoes, erro, p, 'de Newton')
 
 raiz, iteracoes, erro, p = metodoSecante(1, 1, 2, epsilon18, epsilon18)
@@ -47,18 +43,17 @@ printResultado(1, round(raiz, 8), iteracoes, erro, p, 'da Secante')
 # EXEMPLO 19
 print()
 
-raiz = 0
 raiz, iteracoes, erro, p = metodoBissecao(2, 1, 2, 20, epsilon19, epsilon19)
 printResultado(2, raiz, iteracoes, erro, p, 'da Bisseção')
 
 raiz, iteracoes, erro, p = metodoFalsaPosicao(2, 1, 2, 17, epsilon19)
 printResultado(2, raiz, iteracoes, erro, p, 'da Falsa Posição')
 
-raiz, iteracoes, erro, p = metodoPontoFixo(2, 1, metodoNewton(2, 0, epsilon19, epsilon19)[0], epsilon19)
+raiz, iteracoes, erro, p = metodoPontoFixo(2, 1, epsilon19)
 printResultado(2, raiz, iteracoes, erro, p, 'do Ponto Fixo')
 
 # o erro está muito errado para o método de Newton e da Secante no exemplo 19
-raiz, iteracoes, erro, p = metodoNewton(2, 0, epsilon19, epsilon19)
+raiz, iteracoes, erro, p = metodoNewton(2, 0, epsilon19, epsilon19, 0)
 printResultado(2, raiz, iteracoes, erro, p, 'de Newton')
 
 raiz, iteracoes, erro, p = metodoSecante(2, 0, 0.5, epsilon19, epsilon19)
